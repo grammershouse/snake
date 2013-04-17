@@ -22,7 +22,7 @@ Snake.MoveSnake = function(config){
     this.snakeObj[4] = {x : 0, y : 20};
     
     this.BCS = 31;// Bounds frame snake 
-    this.speedLevel = 600;
+    this.speedLevel = 400;
 
     this.init = function(config){
         me.ctx = config.ctx;
@@ -34,21 +34,23 @@ Snake.MoveSnake = function(config){
     this.start = function(){
             //Interval to move snake
             setInterval(function(){
-               me.ctx.clearRect (  0, 0, 800, 500 );
-               me.movingSnake();
+               me.movingSnake(true);
             },me.speedLevel);
             
             //interval to change sprite in snake
             setInterval(function(){ 
-                me.ctx.clearRect (  0, 0, 800, 500 );
                 me.spriteEngine();
             },200);             
     }
     
-    this.movingSnake = function(){
+    this.movingSnake = function(auto){
         
-        if(me.moving) return;
-        me.moving = true;
+        if(me.moving && auto){
+             me.moving = false;
+            return;
+        } 
+       
+        me.ctx.clearRect (  0, 0, 800, 500 );
         
         for(var c = 0; c < me.snakeObj.length; c++){
                 
@@ -82,31 +84,35 @@ Snake.MoveSnake = function(config){
             }
             me.ctx.drawImage(me.mS,me.sourceX,0,+ me.BCS,+ me.BCS,me.snakeObj[c].x,me.snakeObj[c].y,+ me.BCS,+ me.BCS);
         }
-        
-        me.moving = false;
     }
     
     this.moveLeft = function(){
-        console.info("move left");
         me.direction = 'left';
+        this.goMove();
     }
     
     this.moveDown = function(){
-        console.info("move down");
         me.direction = 'down';
+        this.goMove();
     }
 
     this.moveRight = function(){
-        console.info("move right");
         me.direction = 'right';
+        this.goMove();
     }
     
     this.moveUp = function(){
-        console.info("move up");
         me.direction = 'up';
-    }    
+        this.goMove();
+    }
+    
+    this.goMove = function(){
+        me.moving = true;
+        me.movingSnake(false);       
+    }
     
     this.spriteEngine = function(){
+        me.ctx.clearRect (  0, 0, 800, 500 );
         me.sourceX = Math.floor(me.aFrames[me.iFrame] % 9) * 30;
         me.sourceY = 0;
         
