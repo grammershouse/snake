@@ -1,4 +1,4 @@
-if(typeof(Snake)=="undefined"){var Snake = {} };
+if(typeof(Snake) == "undefined"){var Snake = {} };
 
 Snake.MoveSnake = function(config){
     
@@ -11,18 +11,21 @@ Snake.MoveSnake = function(config){
     this.aFrames = [1,2,3,4,5,6,7,8,9];
     this.iFrame = 1;
     
-    this.direction = "right";
+    this.direction = RIGHT_WAY;
     me.moving = false;
     
-    this.snakeObj = [];
-    this.snakeObj[0] = {x : 120, y : 20};
-    this.snakeObj[1] = {x : 90, y : 20};
-    this.snakeObj[2] = {x : 60, y : 20};
-    this.snakeObj[3] = {x : 30, y : 20};
-    this.snakeObj[4] = {x : 0, y : 20};
-    
     this.BCS = 31;// Bounds frame snake 
-    this.speedLevel = 400;
+    this.RSS = 25; //resize snake sprite    
+    
+    this.snakeObj = [];
+    this.snakeObj[0] = {x : 100, y : 20};
+    this.snakeObj[1] = {x : 75, y : 20};
+    this.snakeObj[2] = {x : 50, y : 20};
+    this.snakeObj[3] = {x : 25, y : 20};
+    this.snakeObj[4] = {x : 0, y : 20};
+
+    this.speedLevel = 300;
+    this.collision = false;
 
     this.init = function(config){
         me.ctx = config.ctx;
@@ -40,17 +43,19 @@ Snake.MoveSnake = function(config){
             //interval to change sprite in snake
             setInterval(function(){ 
                 me.spriteEngine();
-            },200);             
+            },1000);             
     }
     
     this.movingSnake = function(auto){
+        
+        if(me.collision == true) return;
         
         if(me.moving && auto){
              me.moving = false;
             return;
         } 
        
-        me.ctx.clearRect (  0, 0, 800, 500 );
+        me.ctx.clearRect (  0, 0, 700, 500 );
         
         for(var c = 0; c < me.snakeObj.length; c++){
                 
@@ -69,40 +74,46 @@ Snake.MoveSnake = function(config){
                 me.posY = me.snakeObj[c]['y'];                
                 
                 switch(me.direction){
-                    case 'left'  : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] - me.BCS;
+                    case LEFT_WAY  : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] - me.RSS;
                         break;
 
-                    case 'down'  : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] + me.BCS;
+                    case DOWN_WAY  : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] + me.RSS;
                         break;
 
-                    case 'right' : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] + me.BCS;
+                    case RIGHT_WAY : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] + me.RSS;
                         break;
 
-                    case 'up'    : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] - me.BCS;
+                    case UP_WAY    : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] - me.RSS;
                         break;                        
                 }
             }
-            me.ctx.drawImage(me.mS,me.sourceX,0,+ me.BCS,+ me.BCS,me.snakeObj[c].x,me.snakeObj[c].y,+ me.BCS,+ me.BCS);
+            me.ctx.drawImage(me.mS,me.sourceX,0, me.BCS, me.BCS, me.snakeObj[c].x, me.snakeObj[c].y , me.RSS, me.RSS);
         }
+        
+        me.checkCollision();
     }
     
     this.moveLeft = function(){
-        me.direction = 'left';
+        if(me.direction == RIGHT_WAY) return; //oposite way not allowed
+        me.direction = LEFT_WAY;
         this.goMove();
     }
     
     this.moveDown = function(){
-        me.direction = 'down';
+        if(me.direction == UP_WAY) return; //oposite way not allowed
+        me.direction = DOWN_WAY;
         this.goMove();
     }
 
     this.moveRight = function(){
-        me.direction = 'right';
+        if(me.direction == LEFT_WAY) return; //oposite way not allowed
+        me.direction = RIGHT_WAY;
         this.goMove();
     }
     
     this.moveUp = function(){
-        me.direction = 'up';
+        if(me.direction == DOWN_WAY) return; //oposite way not allowed
+        me.direction = UP_WAY;
         this.goMove();
     }
     
@@ -112,15 +123,27 @@ Snake.MoveSnake = function(config){
     }
     
     this.spriteEngine = function(){
-        me.ctx.clearRect (  0, 0, 800, 500 );
+        me.ctx.clearRect (  0, 0, 700, 500 );
         me.sourceX = Math.floor(me.aFrames[me.iFrame] % 9) * 30;
         me.sourceY = 0;
         
         for(var c = 0; c < me.snakeObj.length; c++){
-            me.ctx.drawImage(me.mS,me.sourceX,0,+ me.BCS,+ me.BCS,me.snakeObj[c].x,me.snakeObj[c].y,+ me.BCS,+ me.BCS);
+            me.ctx.drawImage(me.mS, me.sourceX,0, me.BCS, me.BCS,me.snakeObj[c].x, me.snakeObj[c].y, me.RSS, me.RSS);
         }
         me.iFrame++;
-        if(me.iFrame == me.aFrames.length) me.iFrame=1;          
+        if(me.iFrame  ==  me.aFrames.length) me.iFrame=1;          
+    }
+    
+    this.checkCollision = function(){
+        for(var c = 0; c < me.snakeObj.length; c++){
+            for(var h = c+1; h < me.snakeObj.length; h++){
+                if(me.snakeObj[c].x == me.snakeObj[h].x && me.snakeObj[c].y == me.snakeObj[h].y){
+                    me.collision = true;
+                    c = h = me.snakeObj.length;
+                    console.info("collision");
+                }
+            }
+        }
     }
     
     this.init(config);
