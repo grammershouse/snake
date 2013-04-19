@@ -18,11 +18,11 @@ Snake.MoveSnake = function(config){
     this.RSS = 25; //resize snake sprite    
     
     this.snakeObj = [];
-    this.snakeObj[0] = {x : 100, y : 20};
-    this.snakeObj[1] = {x : 75, y : 20};
-    this.snakeObj[2] = {x : 50, y : 20};
-    this.snakeObj[3] = {x : 25, y : 20};
-    this.snakeObj[4] = {x : 0, y : 20};
+    this.snakeObj[0] = {x : 100, y : 70};
+    this.snakeObj[1] = {x : 75, y : 70};
+    this.snakeObj[2] = {x : 50, y : 70};
+    this.snakeObj[3] = {x : 25, y : 70};
+    this.snakeObj[4] = {x : 0, y : 70};
 
     this.speedLevel = 300;
     this.collision = false;
@@ -135,13 +135,12 @@ Snake.MoveSnake = function(config){
     }
     
     this.checkCollision = function(){
-        for(var c = 0; c < me.snakeObj.length; c++){
-            for(var h = c+1; h < me.snakeObj.length; h++){
-                if(me.snakeObj[c].x == me.snakeObj[h].x && me.snakeObj[c].y == me.snakeObj[h].y){
-                    me.collision = true;
-                    c = h = me.snakeObj.length;
-                    console.info("collision");
-                }
+        for(var h = 1; h < me.snakeObj.length; h++){
+            if(me.snakeObj[0].x == me.snakeObj[h].x && 
+                me.snakeObj[0].y == me.snakeObj[h].y || me.snakeObj[0].y < 70 || me.snakeObj[0].y > 350){
+                me.collision = true;
+                c = h = me.snakeObj.length;
+                console.info("collision");
             }
         }
     }
