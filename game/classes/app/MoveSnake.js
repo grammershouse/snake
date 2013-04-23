@@ -14,7 +14,8 @@ Snake.MoveSnake = function(config){
     this.direction = RIGHT_WAY;
     me.moving = false;
     
-    this.BCS = 31;// Bounds frame snake 
+    this.BSX = 32;// Bounds frame snake 
+    this.BSY = 40;// Bounds frame snake 
     this.RSS = 25; //resize snake sprite    
     
     this.snakeObj = [];
@@ -41,9 +42,9 @@ Snake.MoveSnake = function(config){
             },me.speedLevel);
             
             //interval to change sprite in snake
-            setInterval(function(){ 
-                me.spriteEngine();
-            },1000);             
+//            setInterval(function(){ 
+//                me.spriteEngine();
+//            },200);             
     }
     
     this.movingSnake = function(auto){
@@ -87,7 +88,10 @@ Snake.MoveSnake = function(config){
                         break;                        
                 }
             }
-            me.ctx.drawImage(me.mS,me.sourceX,0, me.BCS, me.BCS, me.snakeObj[c].x, me.snakeObj[c].y , me.RSS, me.RSS);
+            
+            if(me.snakeObj[c].x > 625) me.snakeObj[c].x = 0;
+            if(me.snakeObj[c].x < 0) me.snakeObj[c].x = 625;
+            me.ctx.drawImage(me.mS,me.sourceX,0, me.BSX, me.BSY, me.snakeObj[c].x, me.snakeObj[c].y , me.RSS, me.RSS);
         }
         
         me.checkCollision();
@@ -124,11 +128,11 @@ Snake.MoveSnake = function(config){
     
     this.spriteEngine = function(){
         me.ctx.clearRect (  0, 0, 700, 500 );
-        me.sourceX = Math.floor(me.aFrames[me.iFrame] % 9) * 30;
+        me.sourceX = Math.floor(me.aFrames[me.iFrame] % 9) * this.BSX;
         me.sourceY = 0;
         
         for(var c = 0; c < me.snakeObj.length; c++){
-            me.ctx.drawImage(me.mS, me.sourceX,0, me.BCS, me.BCS,me.snakeObj[c].x, me.snakeObj[c].y, me.RSS, me.RSS);
+            me.ctx.drawImage(me.mS, me.sourceX,0, me.BSX, me.BSY,me.snakeObj[c].x, me.snakeObj[c].y, me.RSS, me.RSS);
         }
         me.iFrame++;
         if(me.iFrame  ==  me.aFrames.length) me.iFrame=1;          
