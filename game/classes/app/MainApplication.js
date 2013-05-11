@@ -33,6 +33,7 @@ Snake.MainApplication = function(config){
         if (!this.canvasSupport()) return; 
         
         this.moveSnake = new Snake.MoveSnake({ctx : this.ctx});
+        this.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx});
         
 
 //                var ambientLight = .1;
