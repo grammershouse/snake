@@ -19,6 +19,17 @@
         context.drawImage(woodBg, 0, 0); //path and pos x, y
     }   
     
+    
+            //source
+        //pos img x
+        ////pos img y
+        //cut image x
+        //cut image y
+        //position in canvas x
+        //position in canvas y
+        //resize x
+        //resize y
+    
     http://www.w3schools.com/tags/ref_canvas.asp
 http://blog.sklambert.com/html5-canvas-game-panning-a-background/
 http://net.tutsplus.com/tutorials/html-css-techniques/build-your-first-game-with-html5/

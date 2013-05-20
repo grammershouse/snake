@@ -26,14 +26,14 @@ Snake.MainApplication = function(config){
     
     this.addListeners = function(canvas){
         console.info("Listeners Added");
-        document.addEventListener("keyup",me.eventKeyUp, true);        
+        document.addEventListener("keydown",me.eventKeyUp, true);        
     }
     
     this.initializerApp = function(){
         if (!this.canvasSupport()) return; 
         
-        this.moveSnake = new Snake.MoveSnake({ctx : this.ctx});
-        this.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx});
+        this.moveSnake = new Snake.MoveSnake({ctx : this.ctx, main : this});
+        this.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx, main : this});
         
 
 //                var ambientLight = .1;
