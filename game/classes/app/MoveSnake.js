@@ -3,12 +3,19 @@ if(typeof(Snake) == "undefined"){var Snake = {} };
 Snake.MoveSnake = function(config){
     
     var me = this;   
-    var boundsLeft = 0;
-    var boundsRight = 625;
+    var boundsLeft = 160;
+    var boundsRight = 735;
     var posX = 0;
     var posY = 25;
-    var speedLevel = 250;
+    var speedLevel = 100;
     var keyBlocked = false;
+    
+    var BSX = 32;// Bounds frame snake 
+    var BSY = 40;// Bounds frame snake 
+    var RSS = 25; //resize snake sprite    
+    
+    var BTB = 95;  //bounds top board
+    var BBB = 550;  //bounds bottom board    
     
     this.sourceX = 0;
     this.sourceY = 0;
@@ -20,30 +27,38 @@ Snake.MoveSnake = function(config){
     this.direction = RIGHT_WAY;
     me.moving = false;
     
-    this.BSX = 32;// Bounds frame snake 
-    this.BSY = 40;// Bounds frame snake 
-    this.RSS = 25; //resize snake sprite    
-    
     this.snakeObj = [];
-
-    this.snakeObj[0] = {x : 50, y : 75};
-    this.snakeObj[1] = {x : 25, y : 75};
-    this.snakeObj[2] = {x : 0, y : 75};
-
-    this.collision = false;
-
+    this.collision = false;      
+    
     this.init = function(config){
         me.ctx = config.ctx;
         me.main = config.main;
         me.mS = new Image(); //main sprite
-        me.mS.src = IMAGES_PATH + "sprites/MainSprite.png";   
+        me.mS.src = IMAGES_PATH + "sprites/MainSprite.png";
+        this.initSnake();
         this.start();
+    }
+    
+    this.initSnake = function(){
+        me.snakeObj = [];
+        me.snakeObj[0] = {x : 210, y : 115};
+        me.snakeObj[1] = {x : 185, y : 115};
+        me.snakeObj[2] = {x : 160, y : 115};
+
+        me.collision = false;
+        me.direction = RIGHT_WAY;
     }
     
     this.start = function(){
             //Interval to move snake
             setInterval(function(){
-               me.movingSnake(true);
+                if(!me.collision && !me.main.paused){
+                    me.movingSnake(true);
+                    if(me.main.FoodBehavior.xScore > 1){
+                        me.main.FoodBehavior.xScore--;
+                    }
+                    
+                } 
             },speedLevel);
             
             //interval to change sprite in snake
@@ -77,22 +92,22 @@ Snake.MoveSnake = function(config){
                 posY = me.snakeObj[c]['y'];                
                 
                 switch(me.direction){
-                    case LEFT_WAY  : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] - me.RSS;
+                    case LEFT_WAY  : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] - RSS;
                         break;
 
-                    case DOWN_WAY  : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] + me.RSS;
+                    case DOWN_WAY  : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] + RSS;
                         break;
 
-                    case RIGHT_WAY : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] + me.RSS;
+                    case RIGHT_WAY : me.snakeObj[c]['x'] = me.snakeObj[c]['x'] + RSS;
                         break;
 
-                    case UP_WAY    : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] - me.RSS;
+                    case UP_WAY    : me.snakeObj[c]['y'] = me.snakeObj[c]['y'] - RSS;
                         break;                        
                 }
             }
             
-            if(me.snakeObj[c].x > 625) me.snakeObj[c].x = boundsLeft;
-            if(me.snakeObj[c].x < 0) me.snakeObj[c].x = boundsRight;
+            if(me.snakeObj[c].x > boundsRight) me.snakeObj[c].x = boundsLeft;
+            if(me.snakeObj[c].x <  boundsLeft) me.snakeObj[c].x = boundsRight;
             
             me.ctx.clearRect (  posX, posY, 25, 25 );
         }
@@ -100,7 +115,7 @@ Snake.MoveSnake = function(config){
         //if collision we dont paint the snake
         if(!me.checkCollision()){
             for(var c = 0; c < me.snakeObj.length; c++){
-                me.ctx.drawImage(me.mS,me.sourceX,0, me.BSX, me.BSY, me.snakeObj[c].x, me.snakeObj[c].y , me.RSS, me.RSS);
+                me.ctx.drawImage(me.mS,me.sourceX,0, BSX, BSY, me.snakeObj[c].x, me.snakeObj[c].y , RSS, RSS);
             }
         }
         
@@ -143,7 +158,7 @@ Snake.MoveSnake = function(config){
 //        me.sourceY = 0;
 //        
 //        for(var c = 0; c < me.snakeObj.length; c++){
-//            me.ctx.drawImage(me.mS, me.sourceX,0, me.BSX, me.BSY,me.snakeObj[c].x, me.snakeObj[c].y, me.RSS, me.RSS);
+//            me.ctx.drawImage(me.mS, me.sourceX,0, BSX, BSY,me.snakeObj[c].x, me.snakeObj[c].y, RSS, RSS);
 //        }
 //        me.iFrame++;
 //        if(me.iFrame  ==  me.aFrames.length) me.iFrame=1;          
@@ -152,10 +167,11 @@ Snake.MoveSnake = function(config){
     this.checkCollision = function(){
         for(var h = 1; h < me.snakeObj.length; h++){
             if(me.snakeObj[0].x == me.snakeObj[h].x && 
-                me.snakeObj[0].y == me.snakeObj[h].y || me.snakeObj[0].y < 70 || me.snakeObj[0].y > 350){
+                me.snakeObj[0].y == me.snakeObj[h].y || me.snakeObj[0].y < BTB || me.snakeObj[0].y > BBB){
                 me.collision = true;
-                c = h = me.snakeObj.length;
+                h = me.snakeObj.length;
                 console.info("collision");
+                me.main.restartApp();
             }
         }
         
@@ -170,7 +186,8 @@ Snake.MoveSnake = function(config){
             
             //repos food on board
             me.main.FoodBehavior.generateRandomFood();
-            this.incSnakeTail();
+            me.main.FoodBehavior.updateScore();
+            me.incSnakeTail();
         }
     }
     

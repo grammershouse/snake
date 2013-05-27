@@ -4,6 +4,7 @@ Snake.MainApplication = function(config){
     
     var me = this;
     this.ctx = null;
+    this.paused = true;
     this.moveSnake = null;
     
     this.init = function(config){
@@ -32,28 +33,22 @@ Snake.MainApplication = function(config){
     this.initializerApp = function(){
         if (!this.canvasSupport()) return; 
         
-        this.moveSnake = new Snake.MoveSnake({ctx : this.ctx, main : this});
-        this.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx, main : this});
+        me.moveSnake = new Snake.MoveSnake({ctx : this.ctx, main : this});
+        me.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx, main : this});
         
-
-//                var ambientLight = .1;
-//                var intensity = 1;
-//                var radius = 40;
-//                var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';    
-//
-//                var g = ctx.createRadialGradient(40+x, 40, 0, 40+x, 40, radius);
-//                g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
-//                g.addColorStop(0, amb);
-//                ctx.fillStyle = g;
-//                ctx.fillRect(x, 0, 80, 80);
-//
-//                ctx.fillStyle = amb;
-//                ctx.globalCompositeOperation = 'xor';
-//                ctx.fillRect(0,0,800,500);
-//                ctx.globalCompositeOperation = 'source-over';
-
-                
-        }
+        me.gameScore();
+        
+    }
+    
+    this.restartApp = function(){
+        console.info("restart app");
+        
+        setTimeout(function(){
+            me.moveSnake.initSnake();
+            me.FoodBehavior.resetScore();
+        },500);
+        
+    }
     
     this.eventKeyUp = function(e){
          switch(e.keyCode){
@@ -71,9 +66,43 @@ Snake.MainApplication = function(config){
                  
              case 38 :
                  me.moveSnake.moveUp();
-                 break;                 
+                 break;   
+                 
+             case 13 :
+                 me.gamePause();
+                 break;                  
          }
-     }    
+     }  
+     
+     this.gameScore = function(){
+        me.ctx.fillStyle = '#FFF';
+        me.ctx.font = 'italic bold 30px Lemon';
+        me.ctx.fillText('0000000', 610, 65); 
+     }
+     
+     
+     this.gamePause = function(){
+         
+        if(!me.paused){
+
+            me.ctx.fillStyle= "#000000";
+            me.ctx.globalAlpha=0.5; // Half opacity
+            me.ctx.fillRect(157,300,608,40);
+            
+            me.ctx.globalAlpha=1; // Half opacity
+            
+            me.ctx.fillStyle = '#FFFFFF';
+            me.ctx.font = 'italic bold 30px Lemon';
+            me.ctx.fillText('PAUSE !', 400, 330); 
+            
+            me.ctx.save();
+        }else{
+            me.ctx.clearRect(157,300,608,40);
+            me.ctx.restore();
+        }
+        
+        me.paused = (me.paused) ? false : true;
+     }
     
     this.init();
 }

@@ -20,6 +20,10 @@
     }   
     
     
+    //sounds
+    http://www.createjs.com/Docs/SoundJS/classes/HTMLAudioPlugin.html
+    http://downloads.khinsider.com/game-soundtracks/browse/S
+    
             //source
         //pos img x
         ////pos img y
@@ -29,6 +33,24 @@
         //position in canvas y
         //resize x
         //resize y
+        
+        
+        
+        //                var ambientLight = .1;
+//                var intensity = 1;
+//                var radius = 40;
+//                var amb = 'rgba(0,0,0,' + (1-ambientLight) + ')';    
+//
+//                var g = ctx.createRadialGradient(40+x, 40, 0, 40+x, 40, radius);
+//                g.addColorStop(1, 'rgba(0,0,0,' + (1-intensity) + ')');
+//                g.addColorStop(0, amb);
+//                ctx.fillStyle = g;
+//                ctx.fillRect(x, 0, 80, 80);
+//
+//                ctx.fillStyle = amb;
+//                ctx.globalCompositeOperation = 'xor';
+//                ctx.fillRect(0,0,800,500);
+//                ctx.globalCompositeOperation = 'source-over';
     
     http://www.w3schools.com/tags/ref_canvas.asp
 http://blog.sklambert.com/html5-canvas-game-panning-a-background/
