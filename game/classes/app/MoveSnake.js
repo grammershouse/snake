@@ -7,7 +7,7 @@ Snake.MoveSnake = function(config){
     var boundsRight = 735;
     var posX = 0;
     var posY = 25;
-    var speedLevel = 100;
+    var speedLevel = 110;
     var keyBlocked = false;
     
     var BSX = 32;// Bounds frame snake 
@@ -54,10 +54,9 @@ Snake.MoveSnake = function(config){
             setInterval(function(){
                 if(!me.collision && !me.main.paused){
                     me.movingSnake(true);
-                    if(me.main.FoodBehavior.xScore > 1){
-                        me.main.FoodBehavior.xScore--;
+                    if(me.main.Score.xScore > 1){
+                        me.main.Score.xScore--;
                     }
-                    
                 } 
             },speedLevel);
             
@@ -186,7 +185,7 @@ Snake.MoveSnake = function(config){
             
             //repos food on board
             me.main.FoodBehavior.generateRandomFood();
-            me.main.FoodBehavior.updateScore();
+            me.main.Score.updateScore();
             me.incSnakeTail();
         }
     }

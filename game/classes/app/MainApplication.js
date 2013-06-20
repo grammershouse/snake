@@ -35,6 +35,11 @@ Snake.MainApplication = function(config){
         
         me.moveSnake = new Snake.MoveSnake({ctx : this.ctx, main : this});
         me.FoodBehavior = new Snake.FoodBehavior({ctx : this.ctx, main : this});
+        me.Score = new Snake.Score({ctx : this.ctx, main : this});
+        
+        $("#save_button").on("click",function(){
+            me.Score.saveScore();
+        })
         
         me.gameScore();
         
@@ -45,7 +50,7 @@ Snake.MainApplication = function(config){
         
         setTimeout(function(){
             me.moveSnake.initSnake();
-            me.FoodBehavior.resetScore();
+            me.Score.openScorePopup();
         },500);
         
     }

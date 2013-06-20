@@ -8,6 +8,7 @@ Snake.Constants = function(config){
         LEFT_WAY    = "left";
         DOWN_WAY    = "down";
         UP_WAY      = "up";
+        XCORE       = 30;
     }
     
     this.init();
