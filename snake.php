@@ -31,6 +31,25 @@
                color: #440000;
                font-size: 30px;
             }
+            
+            .scorePopup{
+                position: relative;
+                font-size: 40px;
+                color : #fff;
+                margin-left : 8px;
+            }
+            
+            .boxScorePopup{
+                padding: 5px;
+                background-color: #000;
+                position: relative;
+                top: 300px;
+                left: 600px;
+                width: 120px;
+                border-radius: 13px;  
+                opacity:0.8;
+                display : none;
+            }
         </style>
 
   
@@ -56,11 +75,17 @@
             
             <div id="dialog-form" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 207px;">
                 <label for="name">Name</label>
-                <input type="text" name="player_name" id="player_name" class="text ui-widget-content ui-corner-all">
+                <input type="text" name="player_name" id="player_name" class="text ui-widget-content ui-corner-all" maxlength="8">
             </div>
             <button id="save_button" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="margin-left:65px">
                 <span class="ui-button-text" >Save score</span>
             </button>
         </div>
+        
+        <div class="boxScorePopup">
+            <span class="scorePopup">
+            </span>            
+        </div>
+        
     </body>
 </html>

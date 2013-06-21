@@ -3,6 +3,7 @@ if(typeof(Snake)=="undefined"){var Snake = {} };
 Snake.MainApplication = function(config){
     
     var me = this;
+    var splash = true;
     this.ctx = null;
     this.paused = true;
     this.moveSnake = null;
@@ -39,7 +40,19 @@ Snake.MainApplication = function(config){
         
         $("#save_button").on("click",function(){
             me.Score.saveScore();
-        })
+        });
+        
+        $("#player_name").on("keyup",function(e){
+            if(e.keyCode==13){
+                me.Score.saveScore();
+            }
+        });        
+        
+        var splash = new Image();
+        splash.src = "game/media/images/backgrounds/initbg.png";
+        splash.onload = function(){
+            me.ctx.drawImage(splash, 195, 170); //path and pos x, y
+        }        
         
         me.gameScore();
         
@@ -47,10 +60,13 @@ Snake.MainApplication = function(config){
     
     this.restartApp = function(){
         console.info("restart app");
-        
         setTimeout(function(){
-            me.moveSnake.initSnake();
-            me.Score.openScorePopup();
+            if(parseInt(me.Score.getScore()) > 12000){
+                me.Score.openScorePopup();
+            }else{
+                me.Score.resetScore();
+                me.moveSnake.initSnake();                
+            }
         },500);
         
     }
@@ -74,7 +90,9 @@ Snake.MainApplication = function(config){
                  break;   
                  
              case 13 :
-                 me.gamePause();
+                 if(!$( "#hscore" ).dialog( "isOpen" )){
+                    me.gamePause();
+                 }
                  break;                  
          }
      }  
@@ -83,8 +101,15 @@ Snake.MainApplication = function(config){
         me.ctx.fillStyle = '#FFF';
         me.ctx.font = 'italic bold 30px Lemon';
         me.ctx.fillText('0000000', 610, 65); 
+        
+        me.Score.setHighScores();
+        
+        //refresh scores
+        setInterval(function(){
+            me.Score.setHighScores();  
+        },5000);         
+        
      }
-     
      
      this.gamePause = function(){
          
@@ -102,6 +127,12 @@ Snake.MainApplication = function(config){
             
             me.ctx.save();
         }else{
+            
+            if(splash){
+                splash = false;
+                me.ctx.clearRect(195,170,535,350);
+            }
+            
             me.ctx.clearRect(157,300,608,40);
             me.ctx.restore();
         }

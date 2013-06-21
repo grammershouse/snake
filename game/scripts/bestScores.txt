@@ -1,1 +1,1 @@
-{"score_600":{"playerName":"Rigo","score":600},"score_1150":{"playerName":"mariana","score":1150},"score_1000":{"playerName":"ki","score":1000}}
+{"score_12000":{"playerName":"Player1","score":12000},"score_12100":{"playerName":"Player1","score":12100},"score_12200":{"playerName":"Player1","score":12200},"score_12300":{"playerName":"Player1","score":12300},"score_12400":{"playerName":"Player1","score":12400},"score_12650":{"playerName":"Rigo","score":12650},"score_13150":{"playerName":"Rigo","score":13150},"score_17650":{"playerName":"Rigo3","score":17650}}
